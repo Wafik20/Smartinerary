@@ -41,8 +41,8 @@ class Itinerary():
         self.afternoon = afternoon
         self.evening = evening
 
-    def shuffle(timeOfDay):
-        
+    # def shuffle(timeOfDay):
+
 
 
 @app.route('/', methods=['GET', 'POST'])
