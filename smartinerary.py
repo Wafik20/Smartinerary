@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db' #sets database
 userdb = SQLAlchemy(app)
+
 app.secret_key = 'development key'
 
 @app.cli.command('initdb')
@@ -16,34 +17,16 @@ def initdb_command():
 
     print('Initialized the database.')
 
-class User(userdb.Model): # user class is username, password, and saved smartineraries
+class User(userdb.Model): # user class is just username and password
     username = userdb.Column(userdb.String(20), unique=True, primary_key=True)
     password = userdb.Column(userdb.String(20))
-    savedSmartineraries = userdb.Column(userdb.__dict__)
     
-    def __init__(self, username, password, savedSmartineraries):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.savedSmartineraries = savedSmartineraries
         
     def __repr__(self):
-        return '<User %r %r' % (self.username, self.password, self.savedSmartineraries) # for debug purposes
-
-class Smartinerary():
-    def __init__(self, numdays, itineraries):
-        self.numdays = numdays
-        self.itineraries = itineraries
-
-
-class Itinerary():
-    def __init__(self, morning, afternoon, evening):
-        self.morning = morning
-        self.afternoon = afternoon
-        self.evening = evening
-
-    # def shuffle(timeOfDay):
-
-
+        return '<User %r %r' % (self.username, self.password) # for debug purposes
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -58,14 +41,14 @@ def login():
         elif password is None:
             error = 'Invalid password'
         else: 
-            abort(418)
+            session['username'] = user.username
+            return redirect(url_for('mainpage', username = user.username))
 
     return render_template('login.html', error = error) # returns login template
 
 @app.route('/register', methods=['GET', 'POST']) # staff registration page
 def register():
     error = ""
-    success = ""
     if request.method == 'POST':
         u = request.form['username']
         p = request.form['password']
@@ -81,6 +64,11 @@ def register():
         else:
             userdb.session.add(User(u, p)) # adds new user to db
             userdb.session.commit()
-            success = 'New account added successfully'
             return redirect(url_for('login'))
-    return render_template('register.html', error = error, success = success)
+    return render_template('register.html', error = error)
+
+@app.route('/main_<username>', methods=['GET', 'POST'])
+def mainpage(username):
+    if (session['username']) is None:
+        return redirect(url_for('login'))
+    return render_template('mainpage.html', name = username)
