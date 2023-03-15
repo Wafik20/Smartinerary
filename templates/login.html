@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Login</title>
+	</head>
+	<body>
+		<form action="" method="post">
+			Username:  <input type="text" name="user" />
+			<br />
+			Password:  <input type="password" name="pass" />
+			<br />
+            <div class="error" style="color:red"><strong>{{ error }}</strong></div>
+			<input type="submit" value="submit" />
+		</form>
+		<a href="{{ url_for("register") }}">Click Here to Register a New Account</a>
+	</body>
+</html>
