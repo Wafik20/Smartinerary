@@ -16,16 +16,34 @@ def initdb_command():
 
     print('Initialized the database.')
 
-class User(userdb.Model): # user class is just username and password
+class User(userdb.Model): # user class is username, password, and saved smartineraries
     username = userdb.Column(userdb.String(20), unique=True, primary_key=True)
     password = userdb.Column(userdb.String(20))
+    savedSmartineraries = userdb.Column(userdb.__dict__)
     
-    def __init__(self, username, password):
+    def __init__(self, username, password, savedSmartineraries):
         self.username = username
         self.password = password
+        self.savedSmartineraries = savedSmartineraries
         
     def __repr__(self):
-        return '<User %r %r' % (self.username, self.password) # for debug purposes
+        return '<User %r %r' % (self.username, self.password, self.savedSmartineraries) # for debug purposes
+
+class Smartinerary():
+    def __init__(self, numdays, itineraries):
+        self.numdays = numdays
+        self.itineraries = itineraries
+
+
+class Itinerary():
+    def __init__(self, morning, afternoon, evening):
+        self.morning = morning
+        self.afternoon = afternoon
+        self.evening = evening
+
+    def shuffle(timeOfDay):
+        
+
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
