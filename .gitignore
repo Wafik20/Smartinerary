@@ -2,3 +2,4 @@
 website/__pycache__
 website/database.db
 virtual_env
+website/routes/__pycache__

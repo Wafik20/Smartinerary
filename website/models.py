@@ -1,3 +1,11 @@
+#Database Models: 
+#User: standard user module.
+#City: to store the cities, each city has a state.
+#Activity: Each city has mutiple activities
+#Itinerary: Each itinerary has three activites (morning, afternoon, evening)
+#Smartinerary: each smartinerary has reference to one city, and each user can have multiple smartineraries. 
+
+
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -14,14 +22,7 @@ class User(db.Model, UserMixin):
     # Define relationships
     smart_itineraries = relationship('Smartinerary', backref='user', lazy=True)
 
-# class Smartinerary(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     name = db.Column(db.String(100))
-#     description = db.Column(db.String(1000))
 
-#     # Define relationships
-#     itineraries = relationship('Itinerary', backref='smartinerary', lazy=True)
 class Smartinerary(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -53,5 +54,5 @@ class Activity(db.Model):
 
 class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
+    name = db.Column(db.String(100), unique=True)
     state = db.Column(db.String(100))

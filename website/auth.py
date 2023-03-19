@@ -4,17 +4,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 
+#Problems:
+# 1- Login and Sign-up has to work through the form, and does not work by sending a JSON request (does not work in postman).
+# 2- 
 
-
+#name of the blueprint
 auth = Blueprint('auth', __name__)
 
-
+#the login route
+#pre: user is not logged in
+#post: used is logged in or prompted that he does not have a valid acc
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        ##FOR TESTING IN POSTMAN:
+        # data = request.get_json()
+        # email = data['email']
+        # password = data['password']
+        # print(email, password)
         email = request.form.get('email')
         password = request.form.get('password')
-        print(email, password)
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
@@ -28,7 +37,9 @@ def login():
 
     return render_template("login.html", user=current_user)
 
-
+# logout route
+# pre: user is logged in with a valid account
+# post: user is not logged in anymore, and is prompted to the login page
 @auth.route('/logout')
 @login_required
 def logout():
@@ -36,6 +47,9 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
+# sign-up route
+# pre: user is does not have an account
+# post: user has an account and is stored in the database, and is prompted to his home page.
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
