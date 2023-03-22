@@ -43,10 +43,12 @@ class Itinerary(db.Model):
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
+    #wanted to make this enum, but sadly SQLite does not have enum
     activity_type = db.Column(db.String(100))
+    #------------------------------------------
     activity_action = db.Column(db.String(100))
     activity_place = db.Column(db.String(100))
-    activity_location = db.Column(db.Integer)
+    activity_location = db.Column(db.String(1000))
     activity_description = db.Column(db.String(1000))
 
     # Define relationships
