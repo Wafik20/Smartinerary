@@ -18,12 +18,12 @@ auth = Blueprint('auth', __name__)
 def login():
     if request.method == 'POST':
         ##FOR TESTING IN POSTMAN:
-        # data = request.get_json()
-        # email = data['email']
-        # password = data['password']
-        # print(email, password)
-        email = request.form.get('email')
-        password = request.form.get('password')
+        data = request.get_json()
+        email = data['email']
+        password = data['password']
+        print(email, password)
+        # email = request.form.get('email')
+        # password = request.form.get('password')
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
