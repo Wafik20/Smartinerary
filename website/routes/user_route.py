@@ -1,5 +1,5 @@
 ## USER ROUTES: CRUD OPERATION ON USER MODULE
-## Added until now: GET, UPDATE, GET ALL
+## Added until now: GET USER, UPDATE USER, GET ALL USERS
 ##
 ##
 from flask import Blueprint, render_template, request, flash, jsonify
