@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+
+<script src="{{ url_for('static', filename='admin_dash.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+
+    <h1>Admin Dashboard</h1>
+    <ul>
+        <button onclick="createCitiesTable()">Create Table</button>
+        <li><a href="" onclick="">View All Cities</a></li>
+        <li><a href="">Add New City</a></li>
+        <li><a href="">Add New Activity</a></li>
+    </ul>
+    <hr>
+    <h2>City Operations</h2>
+    <form method="POST" onsubmit="updateCitiesTable()" action="http://127.0.0.1:5000/admin/city" name="add-city-form" class="form-inline">
+      <div class="form-group mx-sm-3 mb-2">
+          <label for="city-name" class="sr-only">City Name:</label>
+          <input type="text" id="name" name="city_name" class="form-control" placeholder="City Name" required>
+      </div>
+      <div class="form-group mx-sm-3 mb-2">
+          <label for="state" class="sr-only">State:</label>
+          <input type="text" id="state" name="state" class="form-control" placeholder="State" required>
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Add City</button>
+  </form>
+  
+
+    <table id="myTable" class="table admin_table">
+      <thead class="thead-dark">
+          <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">State</th>
+              <th scope="col">Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for city in cities %}
+          <tr data-city-id="{{ city.id }}">
+              <td>{{ city.id }}</td>
+              <td>{{ city.name }}</td>
+              <td>{{ city.state }}</td>
+              <td>
+                  <button class="btn btn-danger btn-sm" onclick="deleteCity({{ city.id }})">Delete</button>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  
+
+
+   
+    <h2>Activity Operations</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Place</th>
+                <th>Location</th>
+                <th>City</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for activity in activities %}
+            <tr>
+                <td>{{ activity.id }}</td>
+                <td>{{ activity.activity_type }}</td>
+                <td>{{ activity.activity_place }}</td>
+                <td>{{ activity.activity_location }}</td>
+                <td>{{ activity.city.name }}</td>
+                <td>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    {% endblock %}

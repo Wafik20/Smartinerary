@@ -15,6 +15,16 @@ from flask import request
 
 admin_router = Blueprint('admin_router', __name__)
 
+#
+def get_cities():
+	print(City.query.all())
+	return list(City.query.all())
+
+#Go to admin dashboard:
+@admin_router.route('/')
+def admin_dashboard():
+    return render_template('admin_dash.html', user=current_user, cities=get_cities())
+
 ##CITIES 
 #--------------------------------------------------------------------------
 # Get all cities
@@ -33,24 +43,19 @@ def get_all_cities():
 def create_city():
 	#if (current_user.is_admin == False):  return abort(401, "your are not authorized")
 	data = request.get_json()
-	if not 'name' in data or not 'state' in data:
-		return jsonify({
-			'error': 'Bad Request',
-			'message': 'Name of todo or email of creator not given'
-		}), 400
-	else:
-		city = City(name = data['name'], state = data['state'])
-		db.session.add(city)
-		db.session.commit()
-		return {
-		'id': city.id, 'name': city.name, 
-		'state': city.state 
-	    }, 201
+	print("Added City:\n", data)
+	city_name = data['name']
+	state = data['state']
+	city = City(name = city_name, state = state)
+	db.session.add(city)
+	db.session.commit()
+	return render_template("admin_dash.html", user=current_user)
 	
 # Delete city
-@admin_router.route('/city/<id>/', methods=['DELETE'] )
-def delete_city(id):
-	city = City.query.filter_by(id=id).first_or_404()
+@admin_router.route('/city', methods=['DELETE'] )
+def delete_city():
+	city_id = request.args.get('city_id')
+	city = City.query.filter_by(id=city_id).first_or_404()
 	db.session.delete(city)
 	db.session.commit()
 	return {
@@ -144,18 +149,23 @@ def get_rand_activity():  # sourcery skip: avoid-builtin-shadow
 	#only 3 valid types of activities (morning, afternoon, evening)
 	# 
 	valid_types = ['morning', 'afternoon', 'evening']
+
 	#choose type
 	type = request.args.get('type')
+
 	#choose city
 	city_name = request.args.get('city')
+
 	#enforce city validity
 	city = City.query.filter_by(name=city_name).first_or_404()
+
 	#enforce type validity
 	if type not in valid_types:
 		return jsonify({
 			'error': 'Bad request',
 			'message': 'Invalid type of activity'
 		}), 400
+	
 	#generate random activity based on the city and type
 	activity_rand = random.choice(list(Activity.query.filter_by(activity_type=type, city_id=city.id)))
 	return jsonify(

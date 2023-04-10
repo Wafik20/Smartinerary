@@ -13,6 +13,7 @@
   <body>
     <h1 align="center">Smartinerary</h1>
     <h1>Welcome {{current_user.first_name}}</h1>
+    <a href="{{ url_for('admin_router.admin_dashboard') }}">Admin Dashboard</a>
     <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
     <script src="" async defer></script>
   </body>
