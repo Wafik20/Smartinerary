@@ -1,20 +1,215 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-  %}
+{% extends "base.html" %} {% block title %}Smartinerary{% endblock %} {% block
+content %}
 <!DOCTYPE html>
 <html>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://kit.fontawesome.com/7c78b77495.js" crossorigin="anonymous"></script>
+  <style>
+    /* Custom styles go here */
+    .custom-range::-webkit-slider-thumb {
+      background-color: #17a2b8;
+      border: 2px solid #17a2b8;
+    }
+
+    .custom-range::-moz-range-thumb {
+      background-color: #17a2b8;
+      border: 2px solid #17a2b8;
+    }
+
+    .custom-range::-ms-thumb {
+      background-color: #17a2b8;
+      border: 2px solid #17a2b8;
+    }
+
+    .custom-range::-webkit-slider-runnable-track {
+      background-color: #dee2e6;
+      height: 5px;
+    }
+
+    .custom-range::-moz-range-track {
+      background-color: #dee2e6;
+      height: 5px;
+    }
+
+    .custom-range::-ms-track {
+      background-color: #dee2e6;
+      height: 5px;
+      color: transparent;
+    }
+
+    .custom-range::-ms-fill-lower {
+      background-color: #17a2b8;
+    }
+
+    .custom-range::-ms-fill-upper {
+      background-color: #17a2b8;
+    }
+  </style>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
   </head>
   <body>
-    <h1 align="center">Smartinerary</h1>
-    <h1>Welcome {{current_user.first_name}}</h1>
-    <a href="{{ url_for('admin_router.admin_dashboard') }}">Admin Dashboard</a>
-    <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+    <h1 class="text-center mt-5">Welcome {{current_user.first_name}}</h1>
+    <style>
+      .btn-outline-primary {
+        font-size: 1.2rem; /* increase font size */
+        font-weight: bold; /* make text bolder */
+        padding: 0.75rem 1.5rem; /* increase button padding */
+        border-radius: 50px; /* increase border radius to make it more rounded */
+      }
+      #create-smart-btn {
+    position: fixed; /* make the button fixed in position */
+    top: 70px; /* set the distance from the top of the page */
+    right: 20px; /* set the distance from the right of the page */
+    width: 60px; /* set the button width */
+    height: 60px; /* set the button height */
+    border-radius: 50%; /* make the button circular */
+    font-size: 2.5rem; /* set the font size of the plus sign */
+    line-height: 1; /* set the line height of the plus sign to 1 */
+    color: white; /* set the color of the plus sign to white */
+    background-color: green; /* set the background color of the button */
+    border: none; /* remove the border */
+    outline: none; /* remove the outline */
+    cursor: pointer; /* set the cursor to pointer */
+  }
+    </style>
+    
+    <div class="container text-center mt-5">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for smartinerary in user_smarts %}
+          <div class="col-md-4 pb-5">
+            <div class="card h-100 border-0 shadow-lg p-4 pb-5">
+              <img src="https://images.unsplash.com/photo-1640179840059-ffb51b831e06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" class="card-img-top rounded-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title text-primary fw-bold">{{ smartinerary.name }}</h5>
+                <p class="card-text">{{ smartinerary.description }}</p>
+              </div>
+              <div class="card-footer bg-transparent border-top-0">
+                <a href="/smartineraries?smart_id={{smartinerary.id}}" class="btn btn-outline-primary rounded-pill">View</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    
+
+      <!-- HTML button that triggers the modal dialog -->
+      
+      <button
+  id="create-smart-btn"
+  type="button"
+  class="btn"
+  data-toggle="modal"
+  data-target="#smart-modal"
+>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+</button>
+
+      <!-- Modal dialog for creating a new Smartinerary -->
+      <div
+        class="modal fade"
+        id="smart-modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="smart-modal-label"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="smart-modal-label">
+                Create New Smartinierary
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- HTML form for creating a new Smartinerary -->
+              <form id="smart-form" action="">
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="description">Description:</label>
+                  <textarea
+                    class="form-control"
+                    id="description"
+                    name="description"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="city">City:</label>
+                  <select class="form-control" id="city" name="city">
+                    <option value="">--Select a city--</option>
+                    {% for city in cities %}
+                    <option value="{{ city.id }}">
+                      {{ city.name }}, {{ city.state }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="stay-days">Number of Days to Stay:</label>
+                  <input
+                    type="range"
+                    class="custom-range"
+                    id="stay-days"
+                    name="stay_days"
+                    min="1"
+                    max="4"
+                    value="1"
+                    oninput="updateSliderValue()"
+                  />
+                  <output id="stay-days-value">1</output> days
+                </div>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                onclick="createSmart()"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="" async defer></script>
   </body>
 </html>

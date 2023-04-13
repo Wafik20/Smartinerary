@@ -30,9 +30,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
+          <span class="navbar-brand nav-item">Smartinerary</span>
           {% if user.is_authenticated %}
           <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          <a class="nav-item nav-link" href="{{ url_for('admin_router.admin_dashboard') }}">Dashboard</a>
+          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>          
           {% else %}
           <a class="nav-item nav-link" id="login" href="/login">Login</a>
           <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>

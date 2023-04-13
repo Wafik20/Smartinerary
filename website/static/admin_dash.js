@@ -1,65 +1,64 @@
-
-
-function test() {
-  console.log("I am working");
-}
-function openPopup() {
-  var popup = window.open("", "myPopup", "width=400,height=400");
-  popup.document.write("<h1>Hello, world!</h1>");
-}
-
-function createCitiesTable() {
-  axios.get('http://127.0.0.1:5000/admin/city')
-    .then(response => {
-      const tableBody = document.querySelector('#myTable tbody');
-      response.data.forEach(city => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${city.name}</td>
-          <td>${city.state}</td>
-        `;
-        tableBody.appendChild(row);
-      });
+function deleteCity(cityId) {
+  axios
+    .delete(`http://127.0.0.1:5000/admin/city?city_id=${cityId}`)
+    .then((response) => {
+      // remove the row from the table
+      const row = document.querySelector(`tr[data-city-id="${cityId}"]`);
+      row.parentNode.removeChild(row);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
 }
-
-function updateCitiesTable() {
-  event.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const state = document.getElementById("state").value;
-
-  console.log({
-    name: name,
-    state: state
-  });
-
-  axios.post("http://127.0.0.1:5000/admin/city", {
-    name: name,
-    state: state
-  })
-  .then(response => {
-
-    addRowToTable(name, state);
-  })
-  .catch(error => {
-    console.error(error);
-  });
+function deleteActivity(ActivityId) {
+  axios
+    .delete(`http://127.0.0.1:5000/admin/activity?activity_id=${ActivityId}`)
+    .then((response) => {
+      // remove the row from the table
+      const row = document.querySelector(
+        `tr[data-activity-id="${ActivityId}"]`
+      );
+      row.parentNode.removeChild(row);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
-
-
-function addRowToTable(name, state) {
-  var table = document.getElementById("myTable");
-  var row = table.insertRow(-1);
-  var nameCell = row.insertCell(0);
-  var stateCell = row.insertCell(1);
-  nameCell.innerHTML = name;
-  stateCell.innerHTML = state;
+function toggleAdmin(userId) {
+  axios
+    .post(`http://127.0.0.1:5000/admin/user/${userId}/toggle_admin`)
+    .then((response) => {
+      // Update the button text and disabled state
+      const button = document.querySelector(`button[data-user-id="${userId}"]`);
+      const is_admin = response.data.is_admin
+      if(is_admin){
+        button.classList.remove("btn-primary", "btn-secondary");
+        button.classList.add("btn-success");
+        button.innerHTML = "Admin";
+      }
+      else{
+        button.classList.remove("btn-primary", "btn-success");
+        button.classList.add("btn-secondary");
+        button.innerHTML = "User";
+      }
+      
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
-
-function deleteCity(cityId) {
-console.log("you are trying to delete city with id:" + cityId);
+function deleteUser(userId) {
+  console.log(`http://127.0.0.1:5000/users?user_id=${userId}/`);
+  axios
+    .delete(`http://127.0.0.1:5000/users?user_id=${userId}`)
+    .then((response) => {
+      // remove the row from the table
+      const row = document.querySelector(
+        `tr[data-user-id="${userId}"]`
+      );
+      row.parentNode.removeChild(row);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }

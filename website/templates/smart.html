@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Smartinerary{% endblock %} {% block
+content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center mt-5 mb-3">Smartinerary Details</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <p class="lead font-weight-bold">
+        Here are the details of your Smartinerary:
+      </p>
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-dark">Activities:</li>
+        <li class="list-group-item list-group-item-secondary">
+          <h4>Morning Activities:</h4>
+          <ul class="list-group">
+            {% for activity in activities if activity.activity_type=="Morning"
+            %}
+            <li class="list-group-item">
+              {{ activity.activity_action }} at {{ activity.activity_place }}
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="list-group-item list-group-item-secondary">
+          <h4>Afternoon Activities:</h4>
+          <ul class="list-group">
+            {% for activity in activities if activity.activity_type=="Afternoon"
+            %}
+            <li class="list-group-item">
+              {{ activity.activity_action }} at {{ activity.activity_place }}
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li class="list-group-item list-group-item-secondary">
+          <h4>Evening Activities:</h4>
+          <ul class="list-group">
+            {% for activity in activities if activity.activity_type=="Evening"
+            %}
+            <li class="list-group-item">
+              {{ activity.activity_action }} at {{ activity.activity_place }}
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

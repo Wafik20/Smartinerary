@@ -1,86 +1,217 @@
-{% extends 'base.html' %}
-{% block title %}Admin Dashboard{% endblock %}
-{% block content %}
-
+{% extends 'base.html' %} {% block title %}Admin Dashboard{% endblock %} {%
+block content %}
 
 <script src="{{ url_for('static', filename='admin_dash.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+<h1 class="h1 mb-4 mt-4 text-gray-800">Dashboard</h1>
+<hr />
+<h2 class="h2 mb-4 mt-4 text-gray-800">Users</h2>
+<table id="myTable" class="table admin_table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Email</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Is Admin</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr data-user-id="{{ user.id }}">
+      <td>{{ user.id }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.first_name }}</td>
+      <td>{{ "Yes" if user.is_admin else "No" }}</td>
+      <td>
+        <button
+          class="btn btn-danger btn-sm"
+          onclick="deleteUser({{ user.id }})"
+        >
+          Delete
+        </button>
+        {% if user.is_admin %}
+        <button class="btn btn-success btn-sm" data-user-id="{{user.id}}" onclick="toggleAdmin({{ user.id }})">Admin</button>
+        {% else %}
+        <button class="btn btn-secondary btn-sm" data-user-id="{{user.id}}" onclick="toggleAdmin({{ user.id }})">User</button>
+        </button>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
+<hr />
+<h2 class="h2 mb-4 mt-4 text-gray-800">Cities</h2>
+<form
+  method="POST"
+  action="/admin/city"
+  name="add-city-form"
+  class="form-inline"
+>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="city-name" class="sr-only">City Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="city_name"
+      class="form-control"
+      placeholder="City Name"
+      required
+    />
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="state" class="sr-only">State:</label>
+    <input
+      type="text"
+      id="state"
+      name="state"
+      class="form-control"
+      placeholder="State"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Add City</button>
+</form>
 
-    <h1>Admin Dashboard</h1>
-    <ul>
-        <button onclick="createCitiesTable()">Create Table</button>
-        <li><a href="" onclick="">View All Cities</a></li>
-        <li><a href="">Add New City</a></li>
-        <li><a href="">Add New Activity</a></li>
-    </ul>
-    <hr>
-    <h2>City Operations</h2>
-    <form method="POST" onsubmit="updateCitiesTable()" action="http://127.0.0.1:5000/admin/city" name="add-city-form" class="form-inline">
-      <div class="form-group mx-sm-3 mb-2">
-          <label for="city-name" class="sr-only">City Name:</label>
-          <input type="text" id="name" name="city_name" class="form-control" placeholder="City Name" required>
-      </div>
-      <div class="form-group mx-sm-3 mb-2">
-          <label for="state" class="sr-only">State:</label>
-          <input type="text" id="state" name="state" class="form-control" placeholder="State" required>
-      </div>
-      <button type="submit" class="btn btn-primary mb-2">Add City</button>
-  </form>
-  
-
-    <table id="myTable" class="table admin_table">
-      <thead class="thead-dark">
-          <tr>
-              <th scope="col">Id</th>
-              <th scope="col">Name</th>
-              <th scope="col">State</th>
-              <th scope="col">Action</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for city in cities %}
-          <tr data-city-id="{{ city.id }}">
-              <td>{{ city.id }}</td>
-              <td>{{ city.name }}</td>
-              <td>{{ city.state }}</td>
-              <td>
-                  <button class="btn btn-danger btn-sm" onclick="deleteCity({{ city.id }})">Delete</button>
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  
-
-
-   
-    <h2>Activity Operations</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Place</th>
-                <th>Location</th>
-                <th>City</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for activity in activities %}
-            <tr>
-                <td>{{ activity.id }}</td>
-                <td>{{ activity.activity_type }}</td>
-                <td>{{ activity.activity_place }}</td>
-                <td>{{ activity.activity_location }}</td>
-                <td>{{ activity.city.name }}</td>
-                <td>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <hr>
-    {% endblock %}
+<table id="myTable" class="table admin_table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">State</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for city in cities %}
+    <tr data-city-id="{{ city.id }}">
+      <td>{{ city.id }}</td>
+      <td>{{ city.name }}</td>
+      <td>{{ city.state }}</td>
+      <td>
+        <button
+          class="btn btn-danger btn-sm"
+          onclick="deleteCity({{ city.id }})"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<hr />
+<h2 class="h2 mb-4 mt-4 text-gray-800">Activities</h2>
+<form
+  method="POST"
+  action="/admin/activity"
+  name="add-activity-form"
+  class="form-inline"
+>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="activity-type" class="sr-only">Activity Type:</label>
+    <select
+      id="activity-type"
+      name="activity_type"
+      class="form-control"
+      required
+    >
+      <option value="">-- Select Activity Type --</option>
+      <option value="Morning">Morning</option>
+      <option value="Afternoon">Afternoon</option>
+      <option value="Evening">Evening</option>
+    </select>
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="activity-action" class="sr-only">Activity Action:</label>
+    <input
+      type="text"
+      id="activity-action"
+      name="activity_action"
+      class="form-control"
+      placeholder="Activity Action"
+      required
+    />
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="activity-place" class="sr-only">Activity Place:</label>
+    <input
+      type="text"
+      id="activity-place"
+      name="activity_place"
+      class="form-control"
+      placeholder="Activity Place"
+      required
+    />
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="activity-location" class="sr-only">Activity Location:</label>
+    <input
+      type="text"
+      id="activity-location"
+      name="activity_location"
+      class="form-control"
+      placeholder="Activity Location"
+      required
+    />
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="activity-description" class="sr-only"
+      >Activity Description:</label
+    >
+    <input
+      type="text"
+      id="activity-description"
+      name="activity_description"
+      class="form-control"
+      placeholder="Activity Description"
+      required
+    />
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="city-name" class="sr-only">City Name:</label>
+    <select id="city-name" name="city_id" class="form-control" required>
+      <option value="">-- Select City --</option>
+      {% for city in cities %}
+      <option value="{{ city.id }}">{{ city.name }}, {{ city.state }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Add Activity</button>
+</form>
+<table class="table admin_table">
+  <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Place</th>
+      <th>Location</th>
+      <th>City</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for activity in activities %}
+    <tr data-activity-id="{{ activity.id }}">
+      <td>{{ activity.id }}</td>
+      <td>{{ activity.activity_type }}</td>
+      <td>{{ activity.activity_place }}</td>
+      <td>{{ activity.activity_location }}</td>
+      <td>{{ activity.city.name }}</td>
+      <td>
+        <button
+          class="btn btn-danger btn-sm"
+          onclick="deleteActivity({{ activity.id }})"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<hr />
+{% endblock %}

@@ -2,13 +2,15 @@
 ## Added until now: GET USER, UPDATE USER, GET ALL USERS
 ##
 ##
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect
 from flask_login import login_required, current_user
 from .. import db
 from ..models import User
 import json
 
 user_route = Blueprint('user_route', __name__)
+
+#create a user
 
 
 #get all users
@@ -63,3 +65,16 @@ def update_user(id):
 		})
 
 #delete user
+@user_route.route('/', methods=['DELETE'])
+@login_required
+def delete_user():
+	user_id = request.args.get("user_id")
+	user = User.query.filter_by(id=user_id).first_or_404()
+	db.session.delete(user)
+	db.session.commit()
+	flash('User Deleted!', category='success')
+	return jsonify({
+		'id': user.id, 
+		'name': user.first_name, 'is_admin': user.is_admin,
+		'email': user.email
+		})

@@ -5,7 +5,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, UserMixin, current_user
 
 #pre: Flask App is not init
 #post: Flask App is init
