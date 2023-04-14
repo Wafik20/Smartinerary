@@ -4,7 +4,10 @@ content %}
 <html>
   <script src="{{ url_for('static', filename='index.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://kit.fontawesome.com/7c78b77495.js" crossorigin="anonymous"></script>
+  <script
+    src="https://kit.fontawesome.com/7c78b77495.js"
+    crossorigin="anonymous"
+  ></script>
   <style>
     /* Custom styles go here */
     .custom-range::-webkit-slider-thumb {
@@ -67,126 +70,162 @@ content %}
         border-radius: 50px; /* increase border radius to make it more rounded */
       }
       #create-smart-btn {
-    position: fixed; /* make the button fixed in position */
-    top: 70px; /* set the distance from the top of the page */
-    right: 20px; /* set the distance from the right of the page */
-    width: 60px; /* set the button width */
-    height: 60px; /* set the button height */
-    border-radius: 50%; /* make the button circular */
-    font-size: 2.5rem; /* set the font size of the plus sign */
-    line-height: 1; /* set the line height of the plus sign to 1 */
-    color: white; /* set the color of the plus sign to white */
-    background-color: green; /* set the background color of the button */
-    border: none; /* remove the border */
-    outline: none; /* remove the outline */
-    cursor: pointer; /* set the cursor to pointer */
-  }
+        position: fixed; /* make the button fixed in position */
+        top: 70px; /* set the distance from the top of the page */
+        right: 20px; /* set the distance from the right of the page */
+        width: 60px; /* set the button width */
+        height: 60px; /* set the button height */
+        border-radius: 50%; /* make the button circular */
+        font-size: 2.5rem; /* set the font size of the plus sign */
+        line-height: 1; /* set the line height of the plus sign to 1 */
+        color: white; /* set the color of the plus sign to white */
+        background-color: green; /* set the background color of the button */
+        border: none; /* remove the border */
+        outline: none; /* remove the outline */
+        cursor: pointer; /* set the cursor to pointer */
+      }
     </style>
-    
+
+    <style>
+      .card-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .card-dropdown-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        top: 25px;
+        right: 0;
+        min-width: 160px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      }
+      .card-dropdown:hover .card-dropdown-content {
+        display: block;
+      }
+      .card-dropdown-content a {
+        color: black;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: block;
+      }
+      .card-dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
     <div class="container text-center mt-5">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for smartinerary in user_smarts %}
-          <div class="col-md-4 pb-5">
+        <div class="col-md-4 pb-5">
+          <a
+            href="/smartineraries?smart_id={{smartinerary.id}}"
+            class="card-link"
+          >
             <div class="card h-100 border-0 shadow-lg p-4 pb-5">
-              <img src="https://images.unsplash.com/photo-1640179840059-ffb51b831e06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" class="card-img-top rounded-top" alt="...">
+              <img
+                src="https://images.unsplash.com/photo-1640179840059-ffb51b831e06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                class="card-img-top rounded-top"
+                alt="..."
+              />
               <div class="card-body">
-                <h5 class="card-title text-primary fw-bold">{{ smartinerary.name }}</h5>
+                <h5 class="card-title text-primary fw-bold">
+                  {{ smartinerary.name }}
+                </h5>
                 <p class="card-text">{{ smartinerary.description }}</p>
               </div>
-              <div class="card-footer bg-transparent border-top-0">
-                <a href="/smartineraries?smart_id={{smartinerary.id}}" class="btn btn-outline-primary rounded-pill">View</a>
-              </div>
             </div>
-          </div>
+          </a>
+        </div>
         {% endfor %}
       </div>
     </div>
-    
-    
+    <!-- HTML button that triggers the modal dialog -->
 
-      <!-- HTML button that triggers the modal dialog -->
-      
-      <button
-  id="create-smart-btn"
-  type="button"
-  class="btn"
-  data-toggle="modal"
-  data-target="#smart-modal"
->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-</button>
+    <button
+      id="create-smart-btn"
+      type="button"
+      class="btn"
+      data-toggle="modal"
+      data-target="#smart-modal"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+        <path
+          d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+        />
+      </svg>
+    </button>
 
-      <!-- Modal dialog for creating a new Smartinerary -->
-      <div
-        class="modal fade"
-        id="smart-modal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="smart-modal-label"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="smart-modal-label">
-                Create New Smartinierary
-              </h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+    <!-- Modal dialog for creating a new Smartinerary -->
+    <div
+      class="modal fade"
+      id="smart-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="smart-modal-label"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="smart-modal-label">
+              Create New Smartinierary
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form
+            id="smart-form"
+            action="{{ url_for('smartinerary_router.create_smartinerary') }}"
+            method="POST"
+          >
             <div class="modal-body">
               <!-- HTML form for creating a new Smartinerary -->
-              <form id="smart-form" action="">
-                <div class="form-group">
-                  <label for="name">Name:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    name="name"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="description">Description:</label>
-                  <textarea
-                    class="form-control"
-                    id="description"
-                    name="description"
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="city">City:</label>
-                  <select class="form-control" id="city" name="city">
-                    <option value="">--Select a city--</option>
-                    {% for city in cities %}
-                    <option value="{{ city.id }}">
-                      {{ city.name }}, {{ city.state }}
-                    </option>
-                    {% endfor %}
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="stay-days">Number of Days to Stay:</label>
-                  <input
-                    type="range"
-                    class="custom-range"
-                    id="stay-days"
-                    name="stay_days"
-                    min="1"
-                    max="4"
-                    value="1"
-                    oninput="updateSliderValue()"
-                  />
-                  <output id="stay-days-value">1</output> days
-                </div>
-              </form>
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" />
+              </div>
+              <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  name="description"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="city">City:</label>
+                <select class="form-control" id="city" name="city_id">
+                  <option value="">--Select a city--</option>
+                  {% for city in cities %}
+                  <option value="{{ city.id }}">
+                    {{ city.name }}, {{ city.state }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="stay-days">Number of Days to Stay:</label>
+                <input
+                  type="range"
+                  class="custom-range"
+                  id="stay-days"
+                  name="lenOfStay"
+                  min="1"
+                  max="4"
+                  value="1"
+                  oninput="updateSliderValue()"
+                />
+                <output id="stay-days-value">1</output> days
+              </div>
             </div>
 
             <div class="modal-footer">
@@ -197,15 +236,9 @@ content %}
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                onclick="createSmart()"
-              >
-                Create
-              </button>
+              <button type="submit" class="btn btn-primary">Create</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

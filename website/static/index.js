@@ -1,5 +1,3 @@
-const { redirect } = require("react-router-dom");
-
 function updateSliderValue() {
   var slider = document.getElementById("stay-days");
   var output = document.getElementById("stay-days-value");
@@ -20,7 +18,8 @@ function createSmart() {
     .then((response) => {
       // Redirect to the Smartinierary detail page
       const itineraryData = response.data;
-      const smart_id = response.data.smart_id
+      const smart_id = response.data.smart_id;
+      itineraryData["lenOfStay"] = lenOfStay;
       axios
         .post("/admin/itinerary", itineraryData)
         .then((response) => {

@@ -17,7 +17,6 @@ def get_user_smartineraries():
 def get_smartineraries():
     print(Smartinerary.query.all())
     return list(Smartinerary.query.all())
-# Go to admin dashboard:
 
 @home_router.route('/', methods=['GET', 'POST'])
 @login_required

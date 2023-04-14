@@ -234,9 +234,12 @@ def delete_activity():
 @admin_router.route('/itinerary', methods=['POST'])
 def get_itinerary():
     # bind the itinerary to a Smartinerary
-    data = request.get_json()
+    data = request.form.to_dict()
+    itinerary_list = []
 
     smart_id = data['smart_id']
+    
+    lenOfStay = data['lenOfStay']
 
     # enforce Smartinerary validity
     smart = Smartinerary.query.filter_by(
@@ -248,49 +251,66 @@ def get_itinerary():
     # enforce city validity
     city = City.query.filter_by(id=city_id).first_or_404("City not found")
 
-    # get random morning activity
-    morning_rand = random.choice(
-        list(Activity.query.filter_by(activity_type="Morning", city_id=city.id)))
+    #get morning acts for city
+    morning_acts = list(Activity.query.filter_by(activity_type="Morning", city_id=city.id))
 
-    # get random afternoon activity
-    afternoon_rand = random.choice(
-        list(Activity.query.filter_by(activity_type="Afternoon", city_id=city.id)))
+    #get afternoon acts for city
+    afternoon_acts = list(Activity.query.filter_by(activity_type="Afternoon", city_id=city.id))
 
-    # get random evening activity
-    evening_rand = random.choice(
-        list(Activity.query.filter_by(activity_type="Evening", city_id=city.id)))
+    #get eve acts for city
+    evening_acts = list(Activity.query.filter_by(activity_type="Evening", city_id=city.id))
 
-    # create Itinerary
-    itinerary = Itinerary(
+    # choose three random morning activities
+    morning_rand = random.sample(morning_acts, k=int(lenOfStay))
+
+   # choose three random afternoon activities
+    afternoon_rand = random.sample(afternoon_acts, k=int(lenOfStay))
+
+    # choose three random evening activities
+    evening_rand = random.sample(evening_acts, k=int(lenOfStay))
+
+     # create Itinerary
+    for day in range(int(lenOfStay)):    
+        morning = morning_rand[day]
+        afternoon = afternoon_rand[day]
+        evening = evening_rand[day]
+        itinerary = Itinerary(
         smart_itinerary_id=smart_id,
-        morning_activity_id=morning_rand.id,
-        afternoon_activity_id=afternoon_rand.id,
-        evening_activity_id=evening_rand.id
-    )
-    db.session.add(itinerary)
-    db.session.commit()
-    smart_res = jsonify(
-        {
-            'id': itinerary.id, 'smartinerary_id': itinerary.smart_itinerary_id,
-            'activities': [
-                {
-                    'id': morning_rand.id, 'activity_type': morning_rand.activity_type, 'activity_place': morning_rand.activity_place,
-                    'activity_location': morning_rand.activity_location, 'city_id': morning_rand.city_id,
-                    'activity_time': 'morning'
-                },
-                {
-                    'id': afternoon_rand.id, 'activity_type': afternoon_rand.activity_type, 'activity_place': afternoon_rand.activity_place,
-                    'activity_location': afternoon_rand.activity_location, 'city_id': afternoon_rand.city_id,
-                    'activity_time': 'afternoon'
-                },
-                {
-                    'id': evening_rand.id, 'activity_type': evening_rand.activity_type, 'activity_place': evening_rand.activity_place,
-                    'activity_location': evening_rand.activity_location, 'city_id': evening_rand.city_id,
-                    'activity_time': 'evening'
-                }
-            ]
+        morning_activity_id=morning.id,
+        afternoon_activity_id=afternoon.id,
+        evening_activity_id=evening.id
+        )
+        itinerary_string = {
+        'morning_activity': {
+            'id': morning.id,
+            'activity_type': morning.activity_type,
+            'activity_action': morning.activity_action,
+            'activity_place': morning.activity_place,
+            'activity_location': morning.activity_location,
+            'activity_description': morning.activity_description
+        },
+        'afternoon_activity': {
+            'id': afternoon.id,
+            'activity_type': afternoon.activity_type,
+            'activity_action': afternoon.activity_action,
+            'activity_place': afternoon.activity_place,
+            'activity_location': afternoon.activity_location,
+            'activity_description': afternoon.activity_description
+        },
+        'evening_activity': {
+            'id': evening.id,
+            'activity_type': evening.activity_type,
+            'activity_action': evening.activity_action,
+            'activity_place': evening.activity_place,
+            'activity_location': evening.activity_location,
+            'activity_description': evening.activity_description
         }
-    )
-    return  render_template('smart.html', user = current_user, smartinerary = smart_res) 
+        }
+        itinerary_list.append(itinerary_string)
+        db.session.add(itinerary)
+        db.session.commit()
+        print(itinerary_list)
+    return  render_template('smart.html', user=current_user, smartinerary=itinerary_list)
+
 
 # #------------------------------------------------------------------------------------------------------------------

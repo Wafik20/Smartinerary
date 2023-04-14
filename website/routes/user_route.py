@@ -39,6 +39,7 @@ def get_user(id):
 @user_route.route('/<id>/', methods=['PUT'])
 def update_user(id):
 	data = request.get_json()
+	
 
 	if 'first_name' not in data:
 		return {
