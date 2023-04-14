@@ -2,9 +2,9 @@
     block content %}
 
 <form method="POST">
-    <h3 align="center">Edit Profile</h3>    
+    <h3 align="center">Edit {{user.first_name}}'s Profile</h3>   
     <div class="form-group">
-        <label for="password1">Old Password</label>
+        <label for="password1">Current Password</label>
         <input
         type="password"
         class="form-control"
@@ -24,7 +24,7 @@
         />
     </div>
     <div class="form-group">
-        <label for="password3">New Password (Confirm)</label>
+        <label for="password3">New Password <small>(Confirm)</small></label>
         <input
         type="password"
         class="form-control"
@@ -33,7 +33,16 @@
         placeholder="Confirm password"
         />
     </div>
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="form-group">
+        <label for="newname">New First Name</label>
+        <input
+        type="text"
+        class="form-control"
+        id="newname"
+        name="newname"
+        placeholder="Enter new first name"
+        />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Changes</button>
+</form>
     {% endblock %}
