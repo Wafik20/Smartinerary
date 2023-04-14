@@ -25,7 +25,6 @@ def create_app():
     from .routes.user_route import user_route
     from .routes.home_route import home_router
     from .routes.admin_route import admin_router
-    from .routes.edit_route import edit_router
     from .routes.smartineraries_route import smartinerary_router
     from .routes.edit_route import edit_router
     from .auth import auth
