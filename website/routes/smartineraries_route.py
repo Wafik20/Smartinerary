@@ -10,48 +10,6 @@ import json, random
 
 smartinerary_router = Blueprint('smartinerary_router', __name__)
 
-
-def get_smartinerary_activities(smart_id):
-    itinerary = Itinerary.query.filter_by(smart_itinerary_id=smart_id).first()
-    morning_act = Activity.query.filter_by(id=itinerary.morning_activity_id).first()
-    afternoon_act = Activity.query.filter_by(id=itinerary.afternoon_activity_id).first()
-    evening_act = Activity.query.filter_by(id=itinerary.evening_activity_id).first()
-
-    activities = []
-    if morning_act:
-        activities.append({
-            "id": morning_act.id,
-            "activity_type": morning_act.activity_type,
-            "activity_action": morning_act.activity_action,
-            "activity_place": morning_act.activity_place,
-            "activity_location": morning_act.activity_location,
-            "activity_description": morning_act.activity_description,
-            "time_of_day": "morning"
-        })
-    if afternoon_act:
-        activities.append({
-            "id": afternoon_act.id,
-            "activity_type": afternoon_act.activity_type,
-            "activity_action": afternoon_act.activity_action,
-            "activity_place": afternoon_act.activity_place,
-            "activity_location": afternoon_act.activity_location,
-            "activity_description": afternoon_act.activity_description,
-            "time_of_day": "afternoon"
-        })
-    if evening_act:
-        activities.append({
-            "id": evening_act.id,
-            "activity_type": evening_act.activity_type,
-            "activity_action": evening_act.activity_action,
-            "activity_place": evening_act.activity_place,
-            "activity_location": evening_act.activity_location,
-            "activity_description": evening_act.activity_description,
-            "time_of_day": "evening"
-        })
-
-    return activities
-
-
 ##----- SMARTINERARY -----------------
 #User creates a smartinerary
 @smartinerary_router.route('/', methods=['POST'])
