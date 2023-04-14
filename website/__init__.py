@@ -26,12 +26,14 @@ def create_app():
     from .routes.home_route import home_router
     from .routes.admin_route import admin_router
     from .routes.smartineraries_route import smartinerary_router
+    from .routes.edit_route import edit_router
     from .auth import auth
 
     app.register_blueprint(home_router, url_prefix='/')
     app.register_blueprint(user_route, url_prefix='/users')
     app.register_blueprint(admin_router, url_prefix='/admin')
     app.register_blueprint(smartinerary_router, url_prefix='/smartineraries')
+    app.register_blueprint(edit_router, url_prefix='/edit_profile')
     app.register_blueprint(auth, url_prefix='/')
 
     from .models import User
