@@ -184,11 +184,15 @@ def get_all_smartineraries():
         ])
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-#Delete Smart
+#Delete Smart and their corrosponding Itineraries
 @smartinerary_router.route('/delete/', methods=['DELETE'])
 def delete_smart():
     smart_id = request.args.get("smart_id")
     smartinerary = Smartinerary.query.filter_by(id=smart_id).first_or_404()
+    smart_itineraries = Itinerary.query.filter_by(smart_itinerary_id=smart_id).all()
+    for itin in smart_itineraries:
+         db.session.delete(itin)
+    
     db.session.delete(smartinerary)
     db.session.commit()
     return jsonify({

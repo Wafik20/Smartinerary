@@ -53,10 +53,10 @@ function deleteUser(userId) {
     .delete(`http://127.0.0.1:5000/users?user_id=${userId}`)
     .then((response) => {
       // remove the row from the table
-      const row = document.querySelector(
-        `tr[data-user-id="${userId}"]`
-      );
-      row.parentNode.removeChild(row);
+      const card = document.querySelector(`div[data-smart-id='${smart_id}']`);
+      if (card) {
+        card.parentNode.removeChild(card);
+      }
     })
     .catch((error) => {
       console.error(error);

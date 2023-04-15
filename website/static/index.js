@@ -7,29 +7,43 @@ function getSmartForm() {
   const form = document.querySelector("#smart-form");
   form.style.display = "block";
 }
-function createSmart() {
-  const name = document.getElementById("name").value;
-  const description = document.getElementById("description").value;
-  const city_id = document.getElementById("city").value;
-  var lenOfStay = document.getElementById("stay-days").value;
-  const data = { name, description, city_id, lenOfStay };
-  axios
-    .post("/smartineraries", data)
-    .then((response) => {
-      // Redirect to the Smartinierary detail page
-      const itineraryData = response.data;
-      const smart_id = response.data.smart_id;
-      itineraryData["lenOfStay"] = lenOfStay;
-      axios
-        .post("/admin/itinerary", itineraryData)
-        .then((response) => {
-          window.location.href = `/smartineraries?smart_id=${smart_id}`;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+
+shown = false;
+function showDelete(){
+var deleteButtons = document.getElementsByClassName('delete-smart-btn');
+if(!shown){
+  for (var i = 0; i < deleteButtons.length; i++){
+    deleteButtons[i].setAttribute("style", ""); 
+  }
+  shown = true
 }
+else{
+  for (var i = 0; i < deleteButtons.length; i++){
+    deleteButtons[i].setAttribute("style", "display: none"); 
+  }
+  shown = false;
+}
+}
+function deleteSmart(){
+   smart_id = event.target.getAttribute('data-smart-id');
+   //for testing purposes
+   //console.log(`http://127.0.0.1:5000/smartineraries/delete/?smart_id=${smart_id}`);
+
+   //DELETE request
+   axios
+     .delete(`http://127.0.0.1:5000/smartineraries/delete/?smart_id=${smart_id}`)
+     .then((response) => {
+       // remove smartinerary card
+       const card = document.querySelector(`div[card-id='${smart_id}']`);
+       if (card) {
+         card.parentNode.removeChild(card);
+       }
+     })
+     .catch((error) => {
+       console.error(error);
+     });
+}
+
+
+
+
