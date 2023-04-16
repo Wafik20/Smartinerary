@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 edit_router = Blueprint('edit_router', __name__)
 
+
 @edit_router.route('/', methods=['GET', 'POST'])
 def edit_profile():
     if request.method == 'POST':

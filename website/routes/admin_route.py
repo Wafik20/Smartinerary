@@ -32,8 +32,10 @@ def get_users():
 
 @admin_router.route('/')
 def admin_dashboard():
-    return render_template('admin_dash.html', user=current_user, cities=get_cities(), activities=get_activities(), users=get_users())
-
+    if current_user.is_admin:
+        return render_template('admin_dash.html', user=current_user, cities=get_cities(), activities=get_activities(), users=get_users())
+    else:
+        return render_template("not_authorized.html", user=current_user)
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 # toggle admin status
@@ -108,6 +110,7 @@ def create_activity():
     activity_place = request.form["activity_place"]
     activity_location = request.form["activity_location"]
     activity_description = request.form["activity_description"]
+    activity_image = request.form["activity_image"]
     # find the city by name (include city_name as the city name in the JSON request)
     city = City.query.filter_by(id=city_id).first()
     # if there is no associated city return bad request
@@ -124,7 +127,8 @@ def create_activity():
         activity_action=activity_action,
         activity_place=activity_place,
         activity_location=activity_location,
-        activity_description=activity_description
+        activity_description=activity_description,
+        activity_image=activity_image
     )
     db.session.add(activity)
     db.session.commit()

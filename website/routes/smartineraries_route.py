@@ -87,7 +87,8 @@ def create_smartinerary():
                 'activity_action': morning.activity_action,
                 'activity_place': morning.activity_place,
                 'activity_location': morning.activity_location,
-                'activity_description': morning.activity_description
+                'activity_description': morning.activity_description,
+                "activity_image": morning.activity_image
             },
             'afternoon_activity': {
                 'id': afternoon.id,
@@ -95,7 +96,8 @@ def create_smartinerary():
                 'activity_action': afternoon.activity_action,
                 'activity_place': afternoon.activity_place,
                 'activity_location': afternoon.activity_location,
-                'activity_description': afternoon.activity_description
+                'activity_description': afternoon.activity_description,
+                 "activity_image": afternoon.activity_image
             },
             'evening_activity': {
                 'id': evening.id,
@@ -103,7 +105,8 @@ def create_smartinerary():
                 'activity_action': evening.activity_action,
                 'activity_place': evening.activity_place,
                 'activity_location': evening.activity_location,
-                'activity_description': evening.activity_description
+                'activity_description': evening.activity_description,
+                 "activity_image": evening.activity_image
             }
         }
         itinerary_list.append(itinerary_string)
@@ -143,7 +146,8 @@ def get_smartinerary():
                 'activity_action': morning.activity_action,
                 'activity_place': morning.activity_place,
                 'activity_location': morning.activity_location,
-                'activity_description': morning.activity_description
+                'activity_description': morning.activity_description,
+                'activity_image': morning.activity_image
             },
             'afternoon_activity': {
                 'id': afternoon.id,
@@ -151,7 +155,8 @@ def get_smartinerary():
                 'activity_action': afternoon.activity_action,
                 'activity_place': afternoon.activity_place,
                 'activity_location': afternoon.activity_location,
-                'activity_description': afternoon.activity_description
+                'activity_description': afternoon.activity_description,
+                'activity_image': afternoon.activity_image
             },
             'evening_activity': {
                 'id': evening.id,
@@ -159,7 +164,8 @@ def get_smartinerary():
                 'activity_action': evening.activity_action,
                 'activity_place': evening.activity_place,
                 'activity_location': evening.activity_location,
-                'activity_description': evening.activity_description
+                'activity_description': evening.activity_description,
+                'activity_image': evening.activity_image
             }
         }
         itinerary_list.append(itinerary_string)

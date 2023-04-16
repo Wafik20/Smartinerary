@@ -50,6 +50,7 @@ class Activity(db.Model):
     activity_place = db.Column(db.String(100))
     activity_location = db.Column(db.String(1000))
     activity_description = db.Column(db.String(1000))
+    activity_image = db.Column(db.String(1000))
 
     # Define relationships
     city = relationship('City', backref='activities', lazy=True)

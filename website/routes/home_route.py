@@ -21,4 +21,4 @@ def get_smartineraries():
 @home_router.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template("home.html", user = current_user, cities=get_cities(), user_smarts = get_user_smartineraries())
+    return render_template("home.html", user = current_user, is_admin = bool(current_user.is_admin), cities=get_cities(), user_smarts = get_user_smartineraries())

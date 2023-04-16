@@ -37,11 +37,13 @@
             <a class="nav-link" href="/">Home</a>
           </li>
           <li class="nav-item">
+            {% if is_admin %}
             <a
               class="nav-link"
               href="{{ url_for('admin_router.admin_dashboard') }}"
               >Dashboard</a
             >
+            {% endif %}
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('edit_router.edit_profile') }}"
@@ -51,7 +53,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/logout">Logout</a>
           </li>
-          {% else %}
+          {% else  %}
           <li class="nav-item">
             <a class="nav-link" href="/login">Login</a>
           </li>

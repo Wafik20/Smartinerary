@@ -97,34 +97,34 @@ content %}
         background-color: #f1f1f1;
       }
     </style>
-    <div class="container text-center mt-5">
+  <div class="container text-center mt-5">
+    {% if not user_smarts %}
+    <a href="#" class="alert-link hover" data-toggle="modal" data-target="#smart-modal">
+      <div class="alert alert-info">
+        You don't have any smartineraries yet. Create one now!
+      </div>
+    </a>
+    
+    {% else %}
       <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for smartinerary in user_smarts %}
-        <div class="col-md-4 pb-5" card-id="{{ smartinerary.id }}">
+          <div class="col-md-4 pb-5" card-id="{{ smartinerary.id }}">
             <div class="card h-100 border-0 shadow-lg rounded pb-5">
-                  
               <button class="btn btn-danger btn-sm delete-smart-btn" data-smart-id="{{ smartinerary.id }}" style="display: none" onclick="deleteSmart()">Delete</button>
-              <a
-              href="/smartineraries?smart_id={{smartinerary.id}}"
-              class="card-link"
-             >
-              <img
-                src="https://images.unsplash.com/photo-1640179840059-ffb51b831e06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                class="card-img-top rounded-top"
-                alt="..."
-              />
-              <div class="card-body">
-                <h5 class="card-title text-primary fw-bold">
-                  {{ smartinerary.name }}
-                </h5>
-                <p class="card-text">{{ smartinerary.description }}</p>
+              <a href="/smartineraries?smart_id={{smartinerary.id}}" class="card-link">
+                <img src="https://images.unsplash.com/photo-1640179840059-ffb51b831e06?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" class="card-img-top rounded-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title text-primary fw-bold">{{ smartinerary.name }}</h5>
+                  <p class="card-text">{{ smartinerary.description }}</p>
+                </div>
               </div>
-            </div>
-          </a>
-        </div>
+            </a>
+          </div>
         {% endfor %}
       </div>
-    </div>
+    {% endif %}
+  </div>
+  
 
     <!-- HTML button that triggers the modal dialog -->
 
