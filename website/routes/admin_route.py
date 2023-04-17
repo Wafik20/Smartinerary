@@ -33,9 +33,9 @@ def get_users():
 @admin_router.route('/')
 def admin_dashboard():
     if current_user.is_admin:
-        return render_template('admin_dash.html', user=current_user, cities=get_cities(), activities=get_activities(), users=get_users())
+        return render_template('admin_dash.html', user=current_user, cities=get_cities(), activities=get_activities(), users=get_users(), is_admin = bool(current_user.is_admin))
     else:
-        return render_template("not_authorized.html", user=current_user)
+        return render_template("not_authorized.html", user=current_user, is_admin = bool(current_user.is_admin))
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 # toggle admin status
@@ -137,8 +137,6 @@ def create_activity():
 
 # ---------------------------------------------------------------------------------
 # Get activities
-
-
 @admin_router.route('/activity/', methods=['GET'])
 def get_activity():  # sourcery skip: avoid-builtin-shadow
     # only 3 valid types of activities (morning, afternoon, evening)
@@ -177,9 +175,8 @@ def get_activity():  # sourcery skip: avoid-builtin-shadow
     ])
 # ---------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------
+#
 # Get random activity with specified city and type
-
-
 @admin_router.route('/activity_rand/', methods=['GET'])
 def get_rand_activity():  # sourcery skip: avoid-builtin-shadow
     # only 3 valid types of activities (morning, afternoon, evening)

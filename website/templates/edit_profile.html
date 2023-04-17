@@ -1,39 +1,85 @@
-{% extends 'base.html' %} {% block title %}Edit Profile{% endblock %} {%
-    block content %}
-
-<form method="POST">
-    <h3 align="center">Edit {{user.first_name}}'s Profile</h3>   
+{% extends 'base.html' %} {% block title %}Edit Profile{% endblock %} {% block
+content %}
+<div class="container">
+  <h3 align="center">Edit {{user.first_name}}'s Profile</h3>
+  <form method="POST">
     <div class="form-group">
-        <label for="password1">Current Password</label>
-        <input
+      <label for="email">Email</label>
+      <input
+        type="text"
+        class="form-control editable"
+        id="email"
+        name="email"
+        value="{{ user.email }}"
+        readonly
+      />
+    </div>
+    <div class="form-group">
+      <label for="first_name">First Name</label>
+      <input
+        type="text"
+        class="form-control editable"
+        id="first_name"
+        name="first_name"
+        value="{{ user.first_name }}"
+        readonly
+      />
+    </div>
+    <div class="form-group">
+      <label for="password1">Current Password</label>
+      <input
         type="password"
-        class="form-control"
+        class="form-control editable"
         id="password1"
         name="password1"
         placeholder="Enter password"
-        />
+        readonly
+      />
     </div>
     <div class="form-group">
-        <label for="password2">New Password</label>
-        <input
+      <label for="password2">New Password</label>
+      <input
         type="password"
-        class="form-control"
+        class="form-control editable"
         id="password2"
         name="password2"
         placeholder="Enter password"
-        />
+        readonly
+      />
     </div>
     <div class="form-group">
-        <label for="password3">New Password <small>(Confirm)</small></label>
-        <input
+      <label for="password3">New Password <small>(Confirm)</small></label>
+      <input
         type="password"
-        class="form-control"
+        class="form-control editable"
         id="password3"
         name="password3"
         placeholder="Confirm password"
-        />
+        readonly
+      />
     </div>
-    
     <button type="submit" class="btn btn-primary">Submit Changes</button>
-</form>
-    {% endblock %}
+  </form>
+</div>
+
+<script>
+  // Make fields editable on click
+  let fields = document.querySelectorAll(".editable");
+  fields.forEach((field) => {
+    field.addEventListener("click", () => {
+      field.readOnly = false;
+      field.classList.add("editing");
+    });
+  });
+
+  // Prevent form submission when fields are still editable
+  let form = document.querySelector("form");
+  form.addEventListener("submit", (event) => {
+    let editingFields = document.querySelectorAll(".editing");
+    if (editingFields.length > 0) {
+      event.preventDefault();
+      alert("Please finish editing before submitting the form");
+    }
+  });
+</script>
+{% endblock %}

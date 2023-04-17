@@ -33,4 +33,4 @@ def edit_profile():
 
             flash('Password successfully changed')
     #print(current_user.password)
-    return render_template('edit_profile.html', user=current_user)
+    return render_template('edit_profile.html', user=current_user, is_admin = bool(current_user.is_admin))

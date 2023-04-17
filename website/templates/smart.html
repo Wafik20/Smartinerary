@@ -10,6 +10,14 @@ content %}
   <script src="{{ url_for('static', filename='smart_display.js') }}"></script>
   <link
     rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <link
+    rel="stylesheet"
     type="text/css"
     href="{{ url_for('static', filename='styles/smart_display.css') }}"
   />
@@ -18,13 +26,34 @@ content %}
     rel="stylesheet"
   />
 </head>
-<div class="container">
+<div class="container" id="smart-container">
   <h1 class="text-center mt-5 mb-3">Smartinerary Details</h1>
   <div class="col">
     {% for itinerary in smartinerary %}
     <div class="col-md-4 col-sm-6 mb-4">
+      <a
+        class="carousel-control-prev"
+        href="#carouselExampleControls{{ loop.index }}"
+        role="button"
+        data-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a
+        class="carousel-control-next"
+        href="#carouselExampleControls{{ loop.index }}"
+        role="button"
+        data-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
       <div class="card">
         <div class="card-header">
+          <button class="btn btn-primary btn-sm float-right" onclick="shuffleItinerary()">
+            <i class="fa-solid fa-shuffle"></i>
+          </button>
           <h5 class="card-title mb-0">Day {{ loop.index }}</h5>
         </div>
         <div
@@ -79,29 +108,10 @@ content %}
               </ul>
             </div>
           </div>
-          <a
-            class="carousel-control-prev"
-            href="#carouselExampleControls{{ loop.index }}"
-            role="button"
-            data-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a
-            class="carousel-control-next"
-            href="#carouselExampleControls{{ loop.index }}"
-            role="button"
-            data-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
 </div>
-
 {% endblock %}

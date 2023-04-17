@@ -176,18 +176,19 @@ def get_smartinerary():
 #--------------------------------------------------------------------------------------------------
 ## Get all
 ## Get all smarts for the current user
-@smartinerary_router.route('/getall', methods=['GET'])
+@smartinerary_router.route('/user_smarts', methods=['GET'])
 @login_required
-def get_all_smartineraries():
-	curr_user_id = current_user.id
-
-	return jsonify([
-		{ 
-			'id': smartinerary.id,
-            'user_id': smartinerary.user_id, 'city_id': smartinerary.city_id, 
-		    'name': smartinerary.name, 'description': smartinerary.description 
-		} for smartinerary in Smartinerary.query.filter_by(user_id=curr_user_id)
-        ])
+def get_all_user_smartineraries():
+    user_smarts = list(current_user.smart_itineraries)
+    return render_template("user_smarts.html", user_smarts=user_smarts, user=current_user, is_admin = bool(current_user.is_admin))
+#--------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+#Shuffle Itinerary for a user's Itinerary
+@smartinerary_router.route('/shuffle', methods=['PUT'])
+@login_required
+def shuffle():
+    
+    return
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 #Delete Smart and their corrosponding Itineraries

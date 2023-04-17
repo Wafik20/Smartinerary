@@ -6,19 +6,9 @@ import json
 
 home_router = Blueprint('home_router', __name__)
 
-def get_cities():
-    print(City.query.all())
-    return list(City.query.all())
-
-def get_user_smartineraries():
-    print(list(current_user.smart_itineraries))
-    return list(current_user.smart_itineraries)
-
-def get_smartineraries():
-    print(Smartinerary.query.all())
-    return list(Smartinerary.query.all())
 
 @home_router.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template("home.html", user = current_user, is_admin = bool(current_user.is_admin), cities=get_cities(), user_smarts = get_user_smartineraries())
+    return render_template("home.html", user = current_user, is_admin = bool(current_user.is_admin))
+

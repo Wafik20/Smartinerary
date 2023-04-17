@@ -14,7 +14,6 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
-
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body>
@@ -35,6 +34,9 @@
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('smartinerary_router.get_all_user_smartineraries') }}">Smartineraries</a>
           </li>
           <li class="nav-item">
             {% if is_admin %}
