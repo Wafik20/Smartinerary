@@ -27,7 +27,10 @@ content %}
   />
 </head>
 <div class="container" id="smart-container">
-  <h1 class="text-center mt-5 mb-3">Smartinerary Details</h1>
+  <h1 class="text-4xl font-bold text-center text-gray-800 mt-10 mb-6">
+    Smartinerary Details
+  </h1>
+
   <div class="col">
     {% for itinerary in smartinerary %}
     <div class="col-md-4 col-sm-6 mb-4">
@@ -51,7 +54,10 @@ content %}
       </a>
       <div class="card">
         <div class="card-header">
-          <button class="btn btn-primary btn-sm float-right" onclick="shuffleItinerary()">
+          <button
+            class="btn btn-primary btn-sm float-right"
+            onclick="shuffleItinerary()"
+          >
             <i class="fa-solid fa-shuffle"></i>
           </button>
           <h5 class="card-title mb-0">Day {{ loop.index }}</h5>

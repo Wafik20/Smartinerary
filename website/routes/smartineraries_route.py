@@ -10,6 +10,10 @@ import json, random
 
 smartinerary_router = Blueprint('smartinerary_router', __name__)
 
+def get_cities():
+    print(City.query.all())
+    return list(City.query.all())
+
 ##----- SMARTINERARY -----------------
 #User creates a smartinerary
 @smartinerary_router.route('/', methods=['POST'])
@@ -180,7 +184,7 @@ def get_smartinerary():
 @login_required
 def get_all_user_smartineraries():
     user_smarts = list(current_user.smart_itineraries)
-    return render_template("user_smarts.html", user_smarts=user_smarts, user=current_user, is_admin = bool(current_user.is_admin))
+    return render_template("user_smarts.html", user_smarts=user_smarts, user=current_user, is_admin = bool(current_user.is_admin), cities = get_cities())
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 #Shuffle Itinerary for a user's Itinerary
