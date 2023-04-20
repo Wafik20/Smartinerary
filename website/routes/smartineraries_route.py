@@ -247,6 +247,22 @@ def shuffle():
     unique_evening_acts = [activity for activity in Activity.query.filter_by(activity_type="Evening", city_id=city_id).all() if activity.id not in evening_activity_ids]
     new_evening = random.choice(unique_evening_acts)
 
+    print(morning_activities, afternoon_activities, evening_activities)
+    print("\n")
+    print(unique_morning_acts, unique_afternoon_acts, unique_evening_acts)
+    print("\n")
+    print(new_morning, new_afternoon, new_evening)
+
+    # get the itinerary object for the specified day and Smartinerary
+    itinerary = Itinerary.query.filter_by(id = itinerary_id, smart_itinerary_id=smart_id).first_or_404("Itinerary not found")
+
+    itinerary.morning_activity_id = new_morning.id
+    itinerary.afternoon_activity_id = new_afternoon.id
+    itinerary.evening_activity_id = new_evening.id
+
+    # commit the changes to the database
+    db.session.commit()
+
     return jsonify({
             'itinerary_id': itinerary_id, 
             'day': day,
