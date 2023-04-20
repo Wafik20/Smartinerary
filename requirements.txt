@@ -8,3 +8,4 @@ MarkupSafe==2.1.2
 SQLAlchemy==2.0.2
 typing_extensions==4.4.0
 Werkzeug==2.2.2
+flask_login==0.6.2
