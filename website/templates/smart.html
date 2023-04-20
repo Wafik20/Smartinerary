@@ -43,19 +43,23 @@ content %}
         href="#carouselExampleControls{{ loop.index }}"
         role="button"
         data-slide="prev"
+        style="padding: 0; position: absolute; left: 0; margin-right: 50px;"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
+
       <a
         class="carousel-control-next"
         href="#carouselExampleControls{{ loop.index }}"
         role="button"
         data-slide="next"
+        style="padding: 0; position: absolute; right: 0; margin-left: 50px;"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
+
       <div class="card">
         <div class="card-header">
           <button
@@ -70,6 +74,7 @@ content %}
           id="carouselExampleControls{{ loop.index }}"
           class="carousel slide"
           data-ride="carousel"
+          data-interval="false"
         >
           <div class="carousel-inner">
             <div
