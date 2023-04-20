@@ -64,13 +64,13 @@ def create_smartinerary():
     # get eve acts for city
     evening_acts = list(Activity.query.filter_by(activity_type="Evening", city_id=city.id))
 
-    # choose three random morning activities
+    # choose n=lenOfStay random morning activities
     morning_rand = random.sample(morning_acts, k=int(lenOfStay))
 
-    # choose three random afternoon activities
+    # choose n=lenOfStay random afternoon activities
     afternoon_rand = random.sample(afternoon_acts, k=int(lenOfStay))
 
-    # choose three random evening activities
+    # choose n=lenOfStay random evening activities
     evening_rand = random.sample(evening_acts, k=int(lenOfStay))
 
     # create Itinerary
@@ -84,7 +84,11 @@ def create_smartinerary():
             afternoon_activity_id=afternoon.id,
             evening_activity_id=evening.id
         )
+        db.session.add(itinerary)
+        db.session.commit()
         itinerary_string = {
+            'itinerary_id': itinerary.id, 
+            'day': day+1,
             'morning_activity': {
                 'id': morning.id,
                 'activity_type': morning.activity_type,
@@ -114,10 +118,8 @@ def create_smartinerary():
             }
         }
         itinerary_list.append(itinerary_string)
-        db.session.add(itinerary)
-        db.session.commit()
 
-    return render_template("smart.html", user = current_user, smartinerary = itinerary_list)
+    return render_template("smart.html", user = current_user, smartinerary = itinerary_list, smart_id = smartinerary.id)
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -129,7 +131,7 @@ def get_smartinerary():
     smart_id = request.args.get("smart_id")
     # get user
     user = current_user
-    
+
     # get Smartinerary
     smart = Smartinerary.query.filter_by(id=smart_id, user_id=user.id).first_or_404("Smartinerary not found")
 
@@ -138,12 +140,16 @@ def get_smartinerary():
     # get Itinerary
     itineraries = Itinerary.query.filter_by(smart_itinerary_id=smart.id).all()
 
+    day = 1
+    
     for itinerary in itineraries:
         morning = Activity.query.get(itinerary.morning_activity_id)
         afternoon = Activity.query.get(itinerary.afternoon_activity_id)
         evening = Activity.query.get(itinerary.evening_activity_id)
 
         itinerary_string = {
+            'itinerary_id': itinerary.id, 
+            'day': day,
             'morning_activity': {
                 'id': morning.id,
                 'activity_type': morning.activity_type,
@@ -172,9 +178,11 @@ def get_smartinerary():
                 'activity_image': evening.activity_image
             }
         }
+        day += 1
         itinerary_list.append(itinerary_string)
 
-    return render_template("smart.html", user=current_user, smartinerary=itinerary_list)
+
+    return render_template("smart.html", user=current_user, smartinerary=itinerary_list, smart_id = smart.id)
 
 
 #--------------------------------------------------------------------------------------------------
@@ -191,8 +199,85 @@ def get_all_user_smartineraries():
 @smartinerary_router.route('/shuffle', methods=['PUT'])
 @login_required
 def shuffle():
+    #get day
+    day = request.json.get('day')
+    #get itin
+    itinerary_id = request.json.get('itinerary_id')
+    #get Smart
+    smart_id = request.json.get('smart_id')
+    smart = Smartinerary.query.filter_by(id=smart_id).first_or_404("Smartinerary not found")
+    #get city id
+    city_id = smart.city_id
+    #get all morning acts in the smart
+    morning_activities = (
+        Activity.query
+        .join(Itinerary, Activity.id == Itinerary.morning_activity_id)
+        .join(Smartinerary, Itinerary.smart_itinerary_id == Smartinerary.id)
+        .filter(Smartinerary.id == smart_id)
+        .all())
     
-    return
+    #get all afternoon acts in the smart 
+    afternoon_activities = (
+        Activity.query
+        .join(Itinerary, Activity.id == Itinerary.afternoon_activity_id)
+        .join(Smartinerary, Itinerary.smart_itinerary_id == Smartinerary.id)
+        .filter(Smartinerary.id == smart_id)
+        .all())
+    
+     #get all evening acts in the smart 
+    evening_activities = (
+        Activity.query
+        .join(Itinerary, Activity.id == Itinerary.evening_activity_id)
+        .join(Smartinerary, Itinerary.smart_itinerary_id == Smartinerary.id)
+        .filter(Smartinerary.id == smart_id)
+        .all())
+    
+    #get a unique morning act
+    morning_activity_ids = [activity.id for activity in morning_activities]
+    unique_morning_acts = [activity for activity in Activity.query.filter_by(activity_type="Morning", city_id=city_id).all() if activity.id not in morning_activity_ids]
+    new_morning = random.choice(unique_morning_acts)
+
+    #get a unique afternoon act
+    afternoon_activity_ids = [activity.id for activity in afternoon_activities]
+    unique_afternoon_acts = [activity for activity in Activity.query.filter_by(activity_type="Afternoon", city_id=city_id).all() if activity.id not in afternoon_activity_ids]
+    new_afternoon = random.choice(unique_afternoon_acts)
+
+    #get a unique evening act
+    evening_activity_ids = [activity.id for activity in evening_activities]
+    unique_evening_acts = [activity for activity in Activity.query.filter_by(activity_type="Evening", city_id=city_id).all() if activity.id not in evening_activity_ids]
+    new_evening = random.choice(unique_evening_acts)
+
+    return jsonify({
+            'itinerary_id': itinerary_id, 
+            'day': day,
+            'morning_activity': {
+                'id': new_morning.id,
+                'activity_type': new_morning.activity_type,
+                'activity_action': new_morning.activity_action,
+                'activity_place': new_morning.activity_place,
+                'activity_location': new_morning.activity_location,
+                'activity_description': new_morning.activity_description,
+                'activity_image': new_morning.activity_image
+            },
+            'afternoon_activity': {
+                'id': new_afternoon.id,
+                'activity_type': new_afternoon.activity_type,
+                'activity_action': new_afternoon.activity_action,
+                'activity_place': new_afternoon.activity_place,
+                'activity_location': new_afternoon.activity_location,
+                'activity_description': new_afternoon.activity_description,
+                'activity_image': new_afternoon.activity_image
+            },
+            'evening_activity': {
+                'id': new_evening.id,
+                'activity_type': new_evening.activity_type,
+                'activity_action': new_evening.activity_action,
+                'activity_place': new_evening.activity_place,
+                'activity_location': new_evening.activity_location,
+                'activity_description': new_evening.activity_description,
+                'activity_image': new_evening.activity_image
+            }
+        })
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 #Delete Smart and their corrosponding Itineraries

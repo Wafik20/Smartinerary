@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Smartinerary{% endblock %} {% block
 content %}
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link
     href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     rel="stylesheet"
@@ -33,7 +34,10 @@ content %}
 
   <div class="col">
     {% for itinerary in smartinerary %}
-    <div class="col-md-4 col-sm-6 mb-4">
+    <div
+      class="col-md-4 col-sm-6 mb-4"
+      itinerary-id="{{itinerary.itinerary_id}}"
+    >
       <a
         class="carousel-control-prev"
         href="#carouselExampleControls{{ loop.index }}"
@@ -56,11 +60,11 @@ content %}
         <div class="card-header">
           <button
             class="btn btn-primary btn-sm float-right"
-            onclick="shuffleItinerary()"
+            onclick="shuffleItinerary({{itinerary.itinerary_id}}, {{itinerary.day}}, {{smart_id}})"
           >
             <i class="fa-solid fa-shuffle"></i>
           </button>
-          <h5 class="card-title mb-0">Day {{ loop.index }}</h5>
+          <h5 class="card-title mb-0">Day {{ itinerary.day }}</h5>
         </div>
         <div
           id="carouselExampleControls{{ loop.index }}"
@@ -68,7 +72,11 @@ content %}
           data-ride="carousel"
         >
           <div class="carousel-inner">
-            <div class="carousel-item active">
+            <div
+              act-type="morning"
+              class="carousel-item active"
+              activity-id="{{itinerary.morning_activity.id}}"
+            >
               <img
                 class="d-block w-100"
                 style="max-width: 350px; max-height: 500px"
@@ -83,7 +91,11 @@ content %}
                 </li>
               </ul>
             </div>
-            <div class="carousel-item">
+            <div
+              act-type="afternoon"
+              class="carousel-item"
+              activity-id="{{itinerary.afternoon_activity.id}}"
+            >
               <img
                 class="d-block w-100"
                 style="max-width: 350px; max-height: 500px"
@@ -98,7 +110,11 @@ content %}
                 </li>
               </ul>
             </div>
-            <div class="carousel-item">
+            <div
+              act-type="evening"
+              class="carousel-item"
+              activity-id="{{itinerary.evening_activity.id}}"
+            >
               <img
                 class="d-block w-100"
                 style="max-width: 350px; max-height: 500px"
