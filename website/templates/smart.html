@@ -2,13 +2,13 @@
 content %}
 <head>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='smart_display.js') }}"></script>
   <link
     href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     rel="stylesheet"
     id="bootstrap-css"
   />
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="{{ url_for('static', filename='smart_display.js') }}"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -43,7 +43,7 @@ content %}
         href="#carouselExampleControls{{ loop.index }}"
         role="button"
         data-slide="prev"
-        style="padding: 0; position: absolute; left: 0; margin-right: 50px;"
+        style="padding: 0; position: absolute; left: 0; margin-right: 50px"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
@@ -54,7 +54,7 @@ content %}
         href="#carouselExampleControls{{ loop.index }}"
         role="button"
         data-slide="next"
-        style="padding: 0; position: absolute; right: 0; margin-left: 50px;"
+        style="padding: 0; position: absolute; right: 0; margin-left: 50px"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>

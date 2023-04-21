@@ -1,6 +1,5 @@
 ## Smartinerary Routes
-## Need to add: 1- filter by city 2-
-##
+# CRUD operations for Smartinerary
 
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user

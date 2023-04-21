@@ -1,8 +1,5 @@
 # ADMIN ROUTE
 # CONTAINS CRUD OPERATIONS ON CITY, ACTIVITY, ITENIRRARY ENTITIES WHICH ARE ONLY ADMIN ACCESSIBLE.
-# THINGS TO FIX:
-# 					1- Don't forget to enforce login by @login_required, and checking if current user is admin before every request
-# on this route
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .. import db
@@ -28,14 +25,17 @@ def get_activities():
 def get_users():
     print(User.query.all())
     return list(User.query.all())
-# Go to admin dashboard:
 
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+# Go to admin dashboard:
 @admin_router.route('/')
 def admin_dashboard():
     if current_user.is_admin:
         return render_template('admin_dash.html', user=current_user, cities=get_cities(), activities=get_activities(), users=get_users(), is_admin = bool(current_user.is_admin))
     else:
         return render_template("not_authorized.html", user=current_user, is_admin = bool(current_user.is_admin))
+    
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 # toggle admin status
@@ -213,6 +213,7 @@ def get_rand_activity():  # sourcery skip: avoid-builtin-shadow
 # Delete Activity
 
 
+
 @admin_router.route('/activity/', methods=['DELETE'])
 def delete_activity():
     activity_id = request.args.get('activity_id')
@@ -229,7 +230,8 @@ def delete_activity():
 
 # ---------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------
-# Iteniraries
+# ITINERARIES
+# ---------------------------------------------------------------------------------------------------------------
 # Create Itinerary (contains 3 activities)
 #
 @admin_router.route('/itinerary', methods=['POST'])
@@ -307,10 +309,13 @@ def get_itinerary():
             'activity_description': evening.activity_description
         }
         }
+        #append the JSON string to the list
         itinerary_list.append(itinerary_string)
+        #add the itinerary to the database
         db.session.add(itinerary)
+        #commit the changes
         db.session.commit()
-        print(itinerary_list)
+        #return the itinerary
     return  render_template('smart.html', user=current_user, smartinerary=itinerary_list)
 
 

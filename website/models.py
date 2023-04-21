@@ -11,6 +11,13 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
+# Define models
+#------------------------------------------
+
+
+
+#User Model
+#------------------------------------------
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
@@ -22,7 +29,8 @@ class User(db.Model, UserMixin):
     # Define relationships
     smart_itineraries = relationship('Smartinerary', backref='user', lazy=True)
 
-
+#Smartinerary Model
+#------------------------------------------
 class Smartinerary(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -33,6 +41,8 @@ class Smartinerary(db.Model):
     # Define relationships
     itineraries = relationship('Itinerary', backref='smartinerary', lazy=True)
 
+#Itinerary Model
+#------------------------------------------
 class Itinerary(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     smart_itinerary_id = db.Column(db.Integer, db.ForeignKey('smartinerary.id'), nullable=False)
@@ -40,6 +50,8 @@ class Itinerary(db.Model):
     afternoon_activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
     evening_activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'))
 
+#Activity Model
+#------------------------------------------
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
@@ -55,6 +67,8 @@ class Activity(db.Model):
     # Define relationships
     city = relationship('City', backref='activities', lazy=True)
 
+#City Model
+#------------------------------------------
 class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)

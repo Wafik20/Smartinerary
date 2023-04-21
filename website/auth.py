@@ -4,10 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 
-#Problems:
-# 1- Login and Sign-up has to work through the form, and does not work by sending a JSON request (does not work in postman).
-# 2- 
-
 #name of the blueprint
 auth = Blueprint('auth', __name__)
 
